@@ -6,12 +6,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        dark: "#1C1C1E",
-        darkElevated: "#2A2A2D",
-        primary: "#F97316",
-        primaryLight: "#FDEAE0",
-        textSecondary: "#6B7280",
-      },
+  dark: "#1C1C1E",
+  darkElevated: "#2A2A2D",
+  primary: "#DE6627",
+  secondary: "#FDE1C2",
+  primaryLight: "#FDE1C2",
+  surface: "#F7F7F8",
+  textSecondary: "#6B7280",
+},
     },
   },
   plugins: [],

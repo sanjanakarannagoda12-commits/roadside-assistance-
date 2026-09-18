@@ -6,7 +6,7 @@ import { colors } from '../theme/colors';
 import ServiceCard from '../components/ServiceCard';
 import BottomNav from '../components/BottomNav';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}:any) {
   const [tab, setTab] = useState('Home');
 
   return (
@@ -61,13 +61,13 @@ export default function HomeScreen() {
         />
       </ScrollView>
 
-      <BottomNav active={tab} onChange={setTab} />
+      <BottomNav active="Home" navigation={navigation} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { padding: 20, paddingTop: 60, paddingBottom: 20 },
+  content: { padding: 20, paddingTop: 60, paddingBottom: 110 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

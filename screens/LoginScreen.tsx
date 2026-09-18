@@ -1,111 +1,88 @@
 // screens/LoginScreen.tsx
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
+import { useAppContext } from '../context/AppContext';
 
 export default function LoginScreen({ navigation }: any) {
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const { setRole } = useAppContext();
+  const [phone, setPhone] = useState('');
+  const [mode, setMode] = useState<'login' | 'signup'>('login');
+
+  const handleContinue = () => {
+    setRole('provider'); // this whole flow is the mechanic app
+    navigation.navigate('OTP', { phone, isNewUser: mode === 'signup' });
+  };
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/mechanic-illustration.png')} // your Figma illustration asset
-        style={styles.illustration}
-        resizeMode="contain"
-      />
+      <View style={styles.logoRow}>
+        <View style={styles.logoCircle}>
+          <Ionicons name="construct-outline" size={24} color={colors.primary} />
+        </View>
+        <Text style={styles.logoText}>Ridzo mechanic</Text>
+      </View>
 
-      <Text style={styles.heading}>Login Details</Text>
+      <Text style={styles.label}>Phone number</Text>
+      <View style={styles.phoneRow}>
+        <View style={styles.prefix}>
+          <Text style={styles.prefixText}>+94</Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="77 123 4567"
+          placeholderTextColor={colors.textSecondary}
+          keyboardType="phone-pad"
+          value={phone}
+          onChangeText={setPhone}
+        />
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Username, email & phone number"
-        placeholderTextColor={colors.textSecondary}
-        value={identifier}
-        onChangeText={setIdentifier}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor={colors.textSecondary}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-        <Text style={styles.forgot}>Forgot Password ?</Text>
+      <TouchableOpacity style={styles.continueButton} onPress={handleContinue} activeOpacity={0.85}>
+        <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => navigation.navigate('Home')}
-        activeOpacity={0.85}
+        onPress={() => setMode(mode === 'login' ? 'signup' : 'login')}
+        style={styles.footerLink}
       >
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
-
-      <View style={styles.dividerRow}>
-        <View style={styles.divider} />
-        <Text style={styles.dividerText}>Or Sign up With</Text>
-        <View style={styles.divider} />
-      </View>
-
-      <TouchableOpacity style={styles.googleButton}>
-        <Image
-          source={require('../assets/google-icon.png')}
-          style={{ width: 24, height: 24 }}
-        />
+        <Text style={styles.footerText}>
+          {mode === 'login' ? "New mechanic? " : 'Already have an account? '}
+          <Text style={{ color: colors.primary, fontWeight: '700' }}>
+            {mode === 'login' ? 'Sign up' : 'Log in'}
+          </Text>
+        </Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, padding: 24, paddingTop: 60 },
-  illustration: { width: '100%', height: 160, marginBottom: 24 },
-  heading: { fontSize: 22, fontWeight: '700', color: colors.textPrimary, marginBottom: 20 },
+  container: { flex: 1, backgroundColor: colors.background, padding: 24, justifyContent: 'center' },
+  logoRow: { alignItems: 'center', marginBottom: 40 },
+  logoCircle: {
+    width: 56, height: 56, borderRadius: 16,
+    backgroundColor: colors.secondary,
+    alignItems: 'center', justifyContent: 'center', marginBottom: 10,
+  },
+  logoText: { fontSize: 16, fontWeight: '600', color: colors.textPrimary },
+  label: { fontSize: 13, color: colors.textSecondary, marginBottom: 8 },
+  phoneRow: { flexDirection: 'row', gap: 8, marginBottom: 20 },
+  prefix: {
+    borderWidth: 1, borderColor: colors.border, borderRadius: 10,
+    paddingHorizontal: 14, justifyContent: 'center',
+  },
+  prefixText: { fontSize: 14, color: colors.textPrimary },
   input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-    marginBottom: 14,
-    fontSize: 14,
-    color: colors.textPrimary,
+    flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 10,
+    paddingHorizontal: 14, paddingVertical: 14, fontSize: 14, color: colors.textPrimary,
   },
-  forgot: {
-    color: colors.textSecondary,
-    textAlign: 'right',
-    marginBottom: 20,
-    fontSize: 13,
+  continueButton: {
+    backgroundColor: colors.primary, paddingVertical: 16, borderRadius: 10,
+    alignItems: 'center', marginBottom: 20,
   },
-  loginButton: {
-    backgroundColor: colors.primary, // was blue in the old design, now orange accent
-    paddingVertical: 16,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  loginButtonText: { color: colors.textOnDark, fontSize: 16, fontWeight: '700' },
-  dividerRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
-  divider: { flex: 1, height: 1, backgroundColor: colors.border },
-  dividerText: { marginHorizontal: 10, color: colors.textSecondary, fontSize: 12 },
-  googleButton: {
-    alignSelf: 'center',
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#F3F4F6',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  continueButtonText: { color: colors.textOnDark, fontSize: 16, fontWeight: '700' },
+  footerLink: { alignItems: 'center' },
+  footerText: { fontSize: 13, color: colors.textSecondary },
 });

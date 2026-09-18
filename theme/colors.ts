@@ -1,21 +1,23 @@
 // theme/colors.ts
-// Central color palette — matches the new dark/orange reference design.
-// Import this anywhere instead of hardcoding hex values, so re-theming later is a one-file change.
-
 export const colors = {
   background: '#FFFFFF',
-  dark: '#1C1C1E',        // hero cards, bottom nav, dark surfaces
-  darkElevated: '#2A2A2D', // slightly lighter dark, for cards on dark bg if needed
+  dark: '#1C1C1E',
+  darkElevated: '#2A2A2D',
 
-  primary: '#F97316',     // main orange accent - buttons, active states, icon circles
-  primaryLight: '#FDEAE0',// pale peach chip background behind icons
+  primary: '#DE6627',     // brand primary — buttons, active states, icon accents
+  secondary: '#FDE1C2',   // brand secondary — pale peach chip/pill backgrounds
+  primaryLight: '#FDE1C2',// alias so anything still using primaryLight doesn't break
 
-  textPrimary: '#111111', // headings
-  textSecondary: '#6B7280', // body / muted text
+  textPrimary: '#111111',
+  textSecondary: '#6B7280',
   textOnDark: '#FFFFFF',
 
+  surface: '#F7F7F8',
   border: '#E5E7EB',
   success: '#22C55E',
+  warning: '#D97706',
+  bgWarning: '#FEF3E2',
+  bgSuccess: '#E9F9EF',
   star: '#FACC15',
 };
 
