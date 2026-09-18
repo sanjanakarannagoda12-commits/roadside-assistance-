@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
+import { useAppContext } from '../context/AppContext';
 
 export default function BasicDetailsScreen({ navigation }: any) {
+  const { setFullName: saveFullName } = useAppContext();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [serviceArea, setServiceArea] = useState('');
@@ -49,7 +51,10 @@ export default function BasicDetailsScreen({ navigation }: any) {
 
       <TouchableOpacity
         style={styles.continueButton}
-        onPress={() => navigation.navigate('VerifyDocuments')}
+        onPress={() => {
+          saveFullName(fullName.trim());
+          navigation.navigate('VerifyDocuments');
+        }}
         activeOpacity={0.85}
       >
         <Text style={styles.continueButtonText}>Continue</Text>

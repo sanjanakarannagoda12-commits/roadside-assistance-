@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, Image, ImageBackground, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
+import { useAppContext } from '../context/AppContext';
 import BottomNav from '../components/BottomNav';
 
 const MENU_CARDS = [
@@ -27,13 +28,15 @@ const MENU_CARDS = [
 ];
 
 export default function HomeMechanicScreen({ navigation }: any) {
+  const { fullName } = useAppContext();
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Header - dark instead of the old blue block */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>Hey, Micheal</Text>
+            <Text style={styles.greeting}>Hey, {fullName ? fullName.split(' ')[0] : 'Mechanic'}</Text>
             <View style={styles.locationRow}>
               <Ionicons name="location-sharp" size={13} color={colors.primary} />
               <Text style={styles.locationText}>Sunil Fix</Text>
