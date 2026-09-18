@@ -46,6 +46,8 @@ export default function RootNavigator() {
         <Stack.Screen name="BasicDetails" component={BasicDetailsScreen} />
         <Stack.Screen name="SpecialtiesPricing" component={SpecialtiesPricingScreen} />
         <Stack.Screen name="UnderReview" component={UnderReviewScreen} />
+        <Stack.Screen name="MyServices" component={PlaceholderScreen} />
+        <Stack.Screen name="JobHistory" component={PlaceholderScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
