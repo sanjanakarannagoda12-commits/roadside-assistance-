@@ -5,28 +5,35 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
 import { useAppContext } from '../context/AppContext';
 
-const TABS = [
+type Tab = { key: string; label: string; icon: string; iconOutline: string; route: string };
+
+const USER_TABS: Tab[] = [
   { key: 'Home', label: 'Home', icon: 'home', iconOutline: 'home-outline', route: 'Home' },
   { key: 'Activities', label: 'Activities', icon: 'grid', iconOutline: 'grid-outline', route: 'Search' },
   { key: 'Notifications', label: 'Notifications', icon: 'notifications', iconOutline: 'notifications-outline', route: 'Messages' },
   { key: 'Account', label: 'Account', icon: 'person', iconOutline: 'person-outline', route: 'Profile' },
-] as const;
+];
+
+const MECHANIC_TABS: Tab[] = [
+  { key: 'Home', label: 'Home', icon: 'home', iconOutline: 'home-outline', route: 'HomeMechanic' },
+  { key: 'Earnings', label: 'Earnings', icon: 'wallet', iconOutline: 'wallet-outline', route: 'Earnings' },
+  { key: 'Messages', label: 'Messages', icon: 'chatbubble', iconOutline: 'chatbubble-outline', route: 'Messages' },
+  { key: 'Profile', label: 'Profile', icon: 'person', iconOutline: 'person-outline', route: 'Profile' },
+];
 
 export default function BottomNav({ active, navigation }: { active: string; navigation: any }) {
   const { role } = useAppContext();
+  const tabs = role === 'provider' ? MECHANIC_TABS : USER_TABS;
 
-  const handlePress = (tab: (typeof TABS)[number]) => {
-    if (tab.key === 'Home') {
-      navigation.navigate(role === 'provider' ? 'HomeMechanic' : 'Home');
-    } else {
-      navigation.navigate(tab.route);
-    }
+  const handlePress = (tab: Tab) => {
+    if (tab.key === active) return;
+    navigation.navigate(tab.route);
   };
 
   return (
     <View style={styles.wrapper} pointerEvents="box-none">
       <View style={styles.bar}>
-        {TABS.map((tab) => {
+        {tabs.map((tab) => {
           const isActive = tab.key === active;
           return (
             <TouchableOpacity
