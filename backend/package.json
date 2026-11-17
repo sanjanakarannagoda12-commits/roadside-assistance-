@@ -8,7 +8,9 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "sms:test": "tsx src/scripts/sendTestSms.ts",
-    "admin:create": "tsx src/scripts/createAdmin.ts"
+    "admin:create": "tsx src/scripts/createAdmin.ts",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "start:prod": "node --enable-source-maps dist/server.js"
   },
   "type": "module",
   "dependencies": {
@@ -34,5 +36,8 @@
     "typescript": "^7.0.2",
     "vitest": "^5.1.0"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  }
 }

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "road-assistance",
-    "slug": "road-assistance",
+    "name": "Ridzo Mechanic",
+    "slug": "ridzo-mechanic",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +12,8 @@
         "LSApplicationQueriesSchemes": [
           "comgooglemaps"
         ]
-      }
+      },
+      "bundleIdentifier": "lk.ridzo.mechanic"
     },
     "android": {
       "adaptiveIcon": {
@@ -20,7 +21,26 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "lk.ridzo.mechanic",
+      "versionCode": 1,
+      "allowBackup": false,
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_LOCATION",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,12 +58,29 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "Ridzo uses your location while you are online to send you nearby breakdown jobs and show customers how far away you are.",
-          "locationAlwaysAndWhenInUsePermission": "Ridzo uses your location while you are online or on a job \u2014 including when you use other apps or lock your phone \u2014 so jobs keep reaching you and customers can see you on the way. It is never used while you are offline.",
+          "locationAlwaysAndWhenInUsePermission": "Ridzo uses your location while you are online or on a job — including when you use other apps or lock your phone — so jobs keep reaching you and customers can see you on the way. It is never used while you are offline.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": false,
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "networkInspector": false
+          }
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "98916992-b544-467b-8cd3-80fbd11ed66a"
+      }
+    },
+    "owner": "anudadev"
   }
 }

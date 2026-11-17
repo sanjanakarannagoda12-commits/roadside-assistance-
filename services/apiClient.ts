@@ -6,6 +6,13 @@ import * as SecureStore from 'expo-secure-store';
 
 export const API_URL = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:4000').replace(/\/$/, '');
 
+// Release builds (APK / store) must only ever talk to an HTTPS server — tokens and documents travel
+// over this connection. Plain http:// is only allowed while developing (Expo Go / dev builds).
+export const INSECURE_API_URL = !__DEV__ && !API_URL.startsWith('https://');
+if (INSECURE_API_URL) {
+  console.error(`[api] Refusing insecure API_URL in a release build: ${API_URL}`);
+}
+
 const ACCESS_KEY = 'ridzo.accessToken';
 const REFRESH_KEY = 'ridzo.refreshToken';
 
@@ -86,6 +93,9 @@ type Options = { method?: string; body?: unknown; form?: FormData; auth?: boolea
 
 export async function api<T>(path: string, opts: Options = {}, retried = false): Promise<T> {
   const { method = 'GET', body, form, auth = true, timeoutMs = 20000 } = opts;
+  if (INSECURE_API_URL) {
+    throw new ApiError(0, 'insecure_server', 'This build is set up with an insecure server address. Please install the latest Ridzo app.');
+  }
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (auth && accessToken) headers.Authorization = `Bearer ${accessToken}`;

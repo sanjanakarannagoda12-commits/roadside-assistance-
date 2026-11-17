@@ -1,4 +1,5 @@
 import express from 'express';
+import { timingSafeEqual } from 'node:crypto';
 import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimit } from 'express-rate-limit';
@@ -38,6 +39,8 @@ export function createApp({ config, repo, files, sms, maps = createMaps(config) 
   app.locals.dispatcher = dispatcher; // server.ts runs dispatcher.tick() every few seconds
 
   app.disable('x-powered-by');
+  // Behind Render/Railway/Fly's proxy: trust exactly one hop so req.ip is the real client (rate limits).
+  if (config.TRUST_PROXY) app.set('trust proxy', 1);
   app.use(helmet());
   app.use(cors());
   app.use(express.json({ limit: '100kb' }));
@@ -60,7 +63,7 @@ export function createApp({ config, repo, files, sms, maps = createMaps(config) 
   }
 
   app.get('/health', (_req, res) => {
-    res.json({ ok: true, db: config.DB_DRIVER, sms: config.SMS_PROVIDER, maps: maps.provider });
+    res.json({ ok: true, env: config.APP_ENV, db: config.DB_DRIVER, sms: config.SMS_PROVIDER, maps: maps.provider });
   });
 
   // Public reference data the app needs for onboarding forms. Prices are Ridzo's (set by admins).
@@ -85,7 +88,16 @@ export function createApp({ config, repo, files, sms, maps = createMaps(config) 
   app.use('/admin', adminRouter({ repo, files, sms, tokens, dispatcher, maps, requireAdmin: requireAdmin(tokens, repo) }));
   app.use('/', mechanicRouter(repo, files, auth, dispatcher));
   app.use('/', jobsRouter(repo, files, dispatcher, auth));
-  if (config.ENABLE_DEV_ROUTES) app.use('/dev', devRouter(repo, files, dispatcher, maps));
+  if (config.ENABLE_DEV_ROUTES) {
+    // On a deployed server the test tools are locked behind a secret header.
+    const devToken = config.DEV_ROUTES_TOKEN;
+    const devGuard: express.RequestHandler = (req, _res, next) => {
+      const given = req.get('x-dev-token') ?? '';
+      const ok = !devToken || (given.length === devToken.length && timingSafeEqual(Buffer.from(given), Buffer.from(devToken)));
+      next(ok ? undefined : new ApiError(404, 'not_found', 'Route not found')); // don't reveal they exist
+    };
+    app.use('/dev', devGuard, devRouter(repo, files, dispatcher, maps));
+  }
 
   app.use((_req, _res, next) => next(new ApiError(404, 'not_found', 'Route not found')));
   app.use(errorHandler);

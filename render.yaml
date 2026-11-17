@@ -1,0 +1,44 @@
+# Render Blueprint — deploys the Ridzo API (backend/) as a Docker web service with HTTPS.
+# Render dashboard → New → Blueprint → pick this repo + branch. You'll be asked for every
+# `sync: false` value (your secrets) — they are never stored in this file or in git.
+services:
+  - type: web
+    name: ridzo-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: singapore            # closest Render region to Sri Lanka
+    plan: 0.5c-512mb             # always-on; the Free plan sleeps after 15 min, which stops dispatch
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: APP_ENV
+        value: staging           # deployed test server: test tools allowed, but only with DEV_ROUTES_TOKEN
+      - key: TRUST_PROXY
+        value: "true"
+      - key: DB_DRIVER
+        value: supabase
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: mechanic-documents
+      - key: JWT_SECRET
+        generateValue: true      # random 256-bit value, created by Render
+      - key: OTP_SECRET
+        generateValue: true
+      - key: SMS_PROVIDER
+        value: console           # login codes appear in the Render logs; switch to textlk once RIDZO is approved
+      - key: TEXTLK_API_TOKEN
+        sync: false
+      - key: TEXTLK_SENDER_ID
+        sync: false
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+      - key: GOOGLE_MAPS_TRAFFIC
+        value: "true"
+      - key: ENABLE_DEV_ROUTES
+        value: "true"
+      - key: DEV_ROUTES_TOKEN
+        generateValue: true      # send as header x-dev-token to use /dev/* on the server
