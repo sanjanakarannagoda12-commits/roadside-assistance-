@@ -57,7 +57,7 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "Ridzo uses your location while you are online to send you nearby breakdown jobs and show customers how far away you are.",
-          "locationAlwaysAndWhenInUsePermission": "Ridzo uses your location while you are online or on a job \u2014 including when you use other apps or lock your phone \u2014 so jobs keep reaching you and customers can see you on the way. It is never used while you are offline.",
+          "locationAlwaysAndWhenInUsePermission": "Ridzo uses your location while you are online or on a job — including when you use other apps or lock your phone — so jobs keep reaching you and customers can see you on the way. It is never used while you are offline.",
           "isIosBackgroundLocationEnabled": true,
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true
@@ -73,7 +73,8 @@
             "networkInspector": false
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {
